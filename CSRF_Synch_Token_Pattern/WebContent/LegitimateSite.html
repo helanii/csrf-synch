@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+
+</head>
+<body>
+<form name="myForm" action="HomeServ" method="post">
+<h2>Channel Doctor</h2>
+<br/>
+<p>Please enter your name and credit card number to make payment</p>
+<br/>
+Name           : <input type="text" name="name"/><br><br>
+Credit Card No : <input type="text" name="cardNo"/><br><br>
+<input type="submit" value="OK"/>
+</form>
+
+
+<script type="text/javascript">
+function callAjax(url, callback){
+    var xmlhttp;
+   
+    xmlhttp = new XMLHttpRequest();
+    xmlhttp.responseType = 'json';
+    xmlhttp.onreadystatechange = function(){
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200){
+            callback(xmlhttp.response);
+        }
+    }
+    xmlhttp.open("GET", url, true);
+    xmlhttp.send();
+}
+
+function myCallback(resp){
+	console.log(resp["CSRF_key"]);
+	
+	var form = document.forms['myForm'];
+	   // form.action = 'put your url here';
+	   var el = document.createElement("input");
+	   el.type = "hidden";
+	   el.name = "hiddenField";
+	   el.value = resp["CSRF_key"];
+	   form.appendChild(el);
+}
+
+callAjax("CSRFGen", myCallback);
+</script>
+</body>
+</html>
